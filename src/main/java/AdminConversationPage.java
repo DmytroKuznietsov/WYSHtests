@@ -20,7 +20,7 @@ public class AdminConversationPage extends AbstractTestPage {
 
 
     public void adminLogin(String login, String password){
-        new WebDriverWait(driver, 20).until(ExpectedConditions.elementToBeClickable(By.cssSelector("div.jss24 > button > span.jss51")));
+        new WebDriverWait(driver, 20).until(ExpectedConditions.elementToBeClickable(By.xpath("//div/div[1]/div/div[3]/div[2]/button")));
         WebElement wLogin = driver.findElement(By.cssSelector(loginAdm));
         wLogin.sendKeys(login);
         WebElement wPass = driver.findElement(By.cssSelector(passAdmin));

@@ -54,7 +54,7 @@ public class ClientLoginPage extends AbstractTestPage {
 
 
     public void loginClnt(String login, String password) {
-        new WebDriverWait(driver, 20).until(ExpectedConditions.elementToBeClickable(By.cssSelector(" div:nth-child(3) > div.jss169 > button")));
+        new WebDriverWait(driver, 20).until(ExpectedConditions.elementToBeClickable(By.xpath("//div[2]/div/div/div/div[3]/div[2]/button")));
         WebElement wLogin = driver.findElement(By.cssSelector(loginIn));
         wLogin.sendKeys(login);
         WebElement wPass = driver.findElement(By.cssSelector(passIn));
@@ -110,15 +110,37 @@ public class ClientLoginPage extends AbstractTestPage {
 
     public void poloRequest (LocalDate DateFromTo, String Participants){
         driver.findElement(By.cssSelector(poolRequest)).click();
+        reservationsFormSet(DateFromTo, Participants);
+    }
+    public void partyRoomRequest (LocalDate DateFromTo, String Participants){
+        driver.findElement(By.cssSelector(partyRoomRequest)).click();
+        new WebDriverWait(driver, 20).until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.cssSelector(waitChatVisibility)));
+        reservationsFormSet(DateFromTo, Participants);
+    }
+    public void spaRequest (LocalDate DateFromTo, String Participants){
+        driver.findElement(By.cssSelector(spaRequest)).click();
+        new WebDriverWait(driver, 20).until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.cssSelector(waitChatVisibility)));
+        reservationsFormSet(DateFromTo, Participants);
+    }
+    public void tennisRequest (LocalDate DateFromTo, String Participants){
+        driver.findElement(By.cssSelector(tennisRequest)).click();
+        new WebDriverWait(driver, 20).until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.cssSelector(waitChatVisibility)));
+        reservationsFormSet(DateFromTo, Participants);
+    }
+
+
+    private void reservationsFormSet(LocalDate DateFromTo, String Participants) {
         new WebDriverWait(driver, 20).until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.cssSelector(waitChatVisibility)));
         String randomDate = DateFromTo.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-        driver.findElement (By.xpath(reservationDateFrom)).sendKeys(randomDate,Keys.ARROW_RIGHT + "15-00");
+        driver.findElement (By.xpath(reservationDateFrom)).sendKeys(randomDate, Keys.ARROW_RIGHT + "15-00");
         driver.findElement (By.xpath(reservationDateTo)).sendKeys(randomDate,Keys.ARROW_RIGHT + "16-00");
         driver.findElement (By.xpath(participaints)).click();
         driver.findElement (By.xpath(participaints)).sendKeys(Keys.BACK_SPACE, Participants);
         driver.findElement(By.xpath(reservationFindButt)).click();
         new WebDriverWait(driver, 20).until(ExpectedConditions.elementToBeClickable(By.xpath(reservationWaitMessage)));
     }
+
+
 
 
 
