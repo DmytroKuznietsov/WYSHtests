@@ -14,8 +14,9 @@ public class WYSH {
 
     private static final String PATH_TO_CHROMEDRIVER = "C:\\chromedriver_win32\\chromedriver.exe";
 
-    private AdminConversationPage testPageAdm;
+    private AdmiIncommengPage testPageAdm;
     private ClientLoginPage testPageClnt;
+    private AdminConversationsPage testPageAdmConv;
 
     String nameRequest = "Kuznietsov Dmytro";
     String detailsRequest = "Details test test test";
@@ -28,19 +29,18 @@ public class WYSH {
         System.setProperty("webdriver.chrome.driver", PATH_TO_CHROMEDRIVER);
         // win mac linux
 
-        testPageAdm = new AdminConversationPage();
-        testPageAdm.driver.manage().window().maximize();
+        testPageAdm = new AdmiIncommengPage();
         testPageClnt = new ClientLoginPage();
-        testPageClnt.driver.manage().window().maximize();
+        testPageAdmConv = new AdminConversationsPage(testPageAdm);
     }
 
-    // ↓ ↓ ↓ ↓ ↓ ↓ REQUESTS TESTS START. TAB CONVERSATION  ↓ ↓ ↓ ↓ ↓ ↓
+    // ↓ ↓ ↓ ↓ ↓ ↓ REQUESTS TESTS START. TAB INCOMING ↓ ↓ ↓ ↓ ↓ ↓
     @Test
     public void Test1() {
         testPageAdm.openPage("https://wysh.console-staging.wysh.ai");
         testPageAdm.adminLogin("concierge@wysh.ai", "Password2017");
         testPageClnt.openPage("https://wysh.console-staging.wysh.ai/widget/login");
-        testPageClnt.loginClnt("sukserhiy@gmail.com", "Password2017");
+        testPageClnt.loginClnt("vlad.swdg@gmail.com", "Password2017");
         testPageClnt.requestMenu();
         testPageClnt.chatRequest();
         testPageAdm.selectCompany();
@@ -164,10 +164,24 @@ public class WYSH {
         Assert.assertEquals(expectedResult, firstRequest);
 
 
-
     }
-    //  ↑ ↑ ↑ ↑ ↑ REQUESTS TESTS ARE FINISH. TAB CONVERSATION  ↑ ↑ ↑ ↑ ↑ ↑
+    //  ↑ ↑ ↑ ↑ ↑ REQUESTS TESTS ARE FINISH. TAB INCOMING  ↑ ↑ ↑ ↑ ↑ ↑
 
+    public void IncomingPrecondition () {
+        testPageAdm.openPage("https://wysh.console-staging.wysh.ai");
+        testPageAdm.adminLogin("concierge@wysh.ai", "Password2017");
+        testPageAdm.selectCompany();
+        testPageAdmConv.OpenConversation();
+    }
+
+
+
+    //Проверка наличия ключевых атрибутов. В дальнейшем сравнение их с Атрибутами во вкладке Resident
+    @Test
+    public void Test9 (){
+    testPageAdmConv.FirstChatOpening();
+    //Assert();
+    }
 
 
     @After

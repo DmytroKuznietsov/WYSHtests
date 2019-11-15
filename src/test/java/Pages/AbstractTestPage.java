@@ -1,8 +1,11 @@
+package Pages;
+
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.support.PageFactory;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
@@ -15,14 +18,21 @@ public abstract class AbstractTestPage {
         driver.manage().timeouts().pageLoadTimeout(50, TimeUnit.SECONDS);
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         driver.manage().window().maximize();
+        PageFactory.initElements(driver, this);
     }
 
     public AbstractTestPage(AbstractTestPage testPage) {
         this.driver = testPage.driver;
+        PageFactory.initElements(driver, this);
     }
 
     public void openPage(String url) {
         driver.navigate().to(url);
+    }
+
+    public void Close () {
+        driver.manage().deleteAllCookies();
+        driver.quit();
     }
 
     public static LocalDate newDate() {
