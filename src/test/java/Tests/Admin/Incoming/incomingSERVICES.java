@@ -13,7 +13,7 @@ public class incomingSERVICES extends adminTest {
 
     @Test
     public void Test1() {
-        precondition();
+        super.precondition();
         String actualMessage = pages.getTestPageAdm().getFirstMessage();
         Assert.assertEquals("Hey. Could you give a list of Internet providers from our house?", actualMessage);
     }

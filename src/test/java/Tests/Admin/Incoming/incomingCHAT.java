@@ -22,7 +22,7 @@ public class incomingCHAT extends adminTest {
 
     @Test
     public void chatCreating() {
-        precondition();
+        super.precondition();
         String actualMessage = pages.getTestPageAdm().getFirstMessage();
         Assert.assertEquals("Hey. Could you give a list of Internet providers from our house?", actualMessage);
     }
@@ -31,8 +31,15 @@ public class incomingCHAT extends adminTest {
 
 
     @Test
-    public void Test3 () {
-        precondition();
+    public void chatDeclineRequest () {
+        super.precondition();
+        pages.getTestPageAdm().selectFirstRequest();
+        String wrongTime = pages.getTestPageAdm().GetTimeOfFirstMessage();
+        pages.getTestPageAdm().selectFirstRequest();
+        pages.getTestPageAdm().declineRequest();
+        String actualTime = pages.getTestPageAdm().GetTimeOfFirstMessage();
+        Assert.assertNotEquals(wrongTime,actualTime);
+
 
     }
 

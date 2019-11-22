@@ -2,6 +2,7 @@ package Pages;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -21,8 +22,8 @@ public class ClientLoginPage extends AbstractTestPage {
     }
     private String loginIn = "input[placeholder^=Email]";
     private String passIn = "input[placeholder^=Pass]";
-    private String signIn = "div:nth-child(3) > div.jss169 > button";
-    private String requestButton = "div:nth-child(2) > button";
+    private String signIn = "#login-button";
+    private String requestButton = "div:nth-child(2) > button"; //no id
     private String textField = "input[type=text]";
     private String sendButton = "//div[3]/div/button/span[1]";
     private String valetTextCar = "//*[@id=\"integration-downshift\"]";
@@ -42,17 +43,17 @@ public class ClientLoginPage extends AbstractTestPage {
     private String reservationFindButt = "//div[2]/div/div/div/div[1]/div/div/button/span[1]";
     private String reservationWaitMessage ="//div/div[3]/div/div/div[1]/p/span[1]";
     /////////////////////////////////////////////////////////////////////////////////////////////////
-    private String chatRequest = "button[data-index=\"2\"]";
-    private String valetRequest = "button[data-index=\"1\"]";
-    private String entrantRequest = "button[data-index=\"8\"]";
-    private String poolRequest = "button[data-index=\"7\"]";
-    private String partyRoomRequest = "button[data-index=\"3\"]";
-    private String tennisRequest = "button[data-index=\"4\"]";
-    private String spaRequest = "button[data-index=\"6\"]";
+    private String chatRequest = "#service-button-2";
+    private String valetRequest = "#service-button-1";
+    private String entrantRequest = "#service-button-8";
+    private String poolRequest = "#service-button-7";
+    private String partyRoomRequest = "#service-button-3";
+    private String tennisRequest = "#service-button-4";
+    private String spaRequest = "#service-button-6";
     ///////////////////////////////////////////////////////////////////////////////////////////////////
     @FindBy (css = "input[type=\"number\"]")
     private WebElement chatTipForm;
-    @FindBy (xpath = "//div[5]/div/div/div[2]/div[1]/div/div/nav/div[1]/div/h3")
+    @FindBy (css = "#add-credit-card-button")
     private WebElement choosePaymentMethod;
     @FindBy (xpath = "//div/div[5]/div/div/div[2]/div[1]/div/div/nav/div[2]/div/h3")
     private WebElement cardValidation;
@@ -76,7 +77,18 @@ public class ClientLoginPage extends AbstractTestPage {
     private WebElement goBack;
     @FindBy (xpath = "//*[@id=\"root\"]/div/div/div[2]/div[1]/div[2]/ul/div[1]/div[1]/h3")
     private WebElement firstRequest;
+    @FindBy (xpath = "//div[2]/div/div[2]/div/div[2]/div/div/div[1]")
+    private WebElement firstMessageChatWait;
 
+    @FindBy (xpath = "//div[2]/div/div[2]/div/div/div/div/div[2]/div[1]/p/span")
+    private WebElement firstMessageTextGet;
+
+    @FindBy (css = "#payment-form-list-item-0")
+    private WebElement firstCard;
+    @FindBy (css = "#payment-form-list-item-1")
+    private WebElement secondCard;
+    @FindBy (css = "#payment-form-loader")
+    private  WebElement paymentLoader;
 
 
 
@@ -102,6 +114,7 @@ public class ClientLoginPage extends AbstractTestPage {
         Text.sendKeys( messageText);
         new WebDriverWait(driver, 20).until(ExpectedConditions.elementToBeClickable(By.xpath(sendButton)));
         driver.findElement(By.xpath(sendButton)).click();
+        new WebDriverWait(driver, 20).until(ExpectedConditions.visibilityOf(firstMessageChatWait));
         Sleep();
     }
 
@@ -172,14 +185,20 @@ public class ClientLoginPage extends AbstractTestPage {
 //        goBack.click();
 //        new WebDriverWait(driver, 20).until(ExpectedConditions.elementToBeClickable(firstRequest));
 //        firstRequest.click();
-       new WebDriverWait(driver, 20).until(ExpectedConditions.visibilityOf(sendTipButton));
+        new WebDriverWait(driver, 20).until(ExpectedConditions.visibilityOf(sendTipButton));
         chatTipForm.sendKeys(money);
         sendTipButton.click();
-        //new WebDriverWait(driver, 20).until(ExpectedConditions.visibilityOf(choosePaymentMethod));
+        //new WebDriverWait(driver, 20).until(ExpectedConditions.visibilityOf(paymentLoader));
+        //new WebDriverWait(driver, 20).until(ExpectedConditions.invisibilityOf(paymentLoader));
         }
 
-        public void payMethod (String number, String name, String validDate, String cvc) {
-            if (cardValidation == null) {
+        public void PayMethod(String number, String name, String validDate, String cvc) {
+            //new WebDriverWait(driver, 20).until(ExpectedConditions.invisibilityOf(paymentLoader));
+            if (IsElementVisible(cardValidation) == false) {
+                Sleep();
+                firstCard.click();
+                new WebDriverWait(driver, 20).until(ExpectedConditions.visibilityOf(lastTipMessage));
+            } else {
                 choosePaymentMethod.click();
                 new WebDriverWait(driver, 20).until(ExpectedConditions.elementToBeClickable(cancelButtom));
                 numberOfCard.sendKeys(number);
@@ -188,13 +207,31 @@ public class ClientLoginPage extends AbstractTestPage {
                 cvcOfCard.sendKeys(cvc);
                 new WebDriverWait(driver, 20).until(ExpectedConditions.elementToBeClickable(submitButtom));
                 submitButtom.click();
+                Sleep();
+                choosePaymentMethod.click();
+                new WebDriverWait(driver, 20).until(ExpectedConditions.visibilityOf(lastTipMessage));
+            }
         }
 
-        Sleep();
-        choosePaymentMethod.click();
-        new WebDriverWait(driver, 20).until(ExpectedConditions.visibilityOf(lastTipMessage));
+    public String GetFirstMessageClnt () {
+        goBack.click();
+        new WebDriverWait(driver, 20).until(ExpectedConditions.elementToBeClickable(firstRequest));
+        firstRequest.click();
+        return firstMessageTextGet.getText();
     }
 
+
+    public static boolean IsElementVisible (WebElement displayed)
+    {
+        try
+        {
+            boolean iv = displayed.isDisplayed();
+            if (iv == true) { return true; } else { return false; }
+        }
+        catch (NoSuchElementException e) {
+            e.printStackTrace();
+            return false; }
+    }
 
 
 

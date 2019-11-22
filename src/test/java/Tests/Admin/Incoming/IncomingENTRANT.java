@@ -21,7 +21,7 @@ public class IncomingENTRANT extends adminTest {
 
     @Test
     public void entrantMessageChek() {
-    precondition();
+        super.precondition();
     LocalDate randomDate = newDate();
          pages.getTestPageClnt().entrantRequest(nameRequest, randomDate , detailsRequest);
          pages.getTestPageAdm().selectFirstRequest();

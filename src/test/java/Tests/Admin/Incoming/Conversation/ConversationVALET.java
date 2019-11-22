@@ -13,7 +13,7 @@ public class ConversationVALET extends IncomingVALET {
 
     @Test
     public void Test1() {
-        precondition();
+        super.precondition();
     }
 
 }

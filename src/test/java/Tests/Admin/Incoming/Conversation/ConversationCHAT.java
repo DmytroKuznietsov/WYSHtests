@@ -25,7 +25,7 @@ public class ConversationCHAT extends incomingCHAT {
 
     @Test
     public void AcceptRequestConvOpen(){
-        precondition();
+        super.precondition();
         pages.getTestPageAdm().AcceptRequest();
         String actualRequest = pages.getTestPageAdmConv().GetFirstSystemMessage();
         String actualName = pages.getTestPageAdmConv().GetName();
@@ -41,19 +41,20 @@ public class ConversationCHAT extends incomingCHAT {
         Assert.assertEquals(expectUnitTenant,actualUnit);
     }
 
-    @Test
+    @Test // удалить
     public void ChatTipForm () {
-        precondition();
+        super.precondition();
         pages.getTestPageAdm().AcceptRequest();
         pages.getTestPageAdmConv().SendForm("Send tip form");
         pages.getTestPageClnt().setTips(tipsMoney);
-        pages.getTestPageAdmConv().SendForm("Send tip form");
-        pages.getTestPageClnt().payMethod(catdNumber,cardName,catdValidDate, cvcCard);
-        String actualRequest = pages.getTestPageAdmConv().FindTextRequest("Payment form sent");
 
-        Assert.assertEquals(actualRequest,"Payment form sent");
+        pages.getTestPageClnt().PayMethod(catdNumber,cardName,catdValidDate, cvcCard);
+        String actualRequest = pages.getTestPageAdmConv().FindTextRequest();
 
-    }
+        Assert.assertEquals(actualRequest,"The tip was paid succesfully");
+}
+
+
 
 
 

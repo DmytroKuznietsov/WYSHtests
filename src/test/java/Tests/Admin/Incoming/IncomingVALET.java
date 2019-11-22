@@ -33,7 +33,7 @@ public class IncomingVALET extends adminTest {
 
     @Test
     public void valetGuestCarCreating() {
-        precondition();
+        super.precondition();
         pages.getTestPageClnt().valetRequest("Guest");
         pages.getTestPageAdm().selectFirstRequest();
         Assert.assertEquals("Car: Guest\n" + "Ticket Number: AA6325", pages.getTestPageAdm().getCarMessage());
@@ -41,7 +41,7 @@ public class IncomingVALET extends adminTest {
 
     @Test
     public void valetMyCarCreating() {
-        precondition();
+        super.precondition();
         pages.getTestPageClnt().valetRequest("Volkswagen");
         pages.getTestPageAdm().selectFirstRequest();
         Assert.assertEquals("Car: Volkswagen", pages.getTestPageAdm().getCarMessage());
@@ -49,7 +49,7 @@ public class IncomingVALET extends adminTest {
 
     @Test
     public void valetDeclineRequest() {
-        precondition();
+        super.precondition();
         pages.getTestPageClnt().valetRequest("Incorrect Car");
         pages.getTestPageAdm().selectFirstRequest();
         pages.getTestPageAdm().declineRequest();

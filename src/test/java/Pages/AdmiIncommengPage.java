@@ -20,25 +20,24 @@ public class AdmiIncommengPage extends AbstractTestPage {
 
     private String loginAdm = "input[placeholder^=Email]";
     private String passAdmin = "input[placeholder^=Pass]";
-    private String signIn = "//div[3]/div[2]/button/span[1]";
+    private String signIn = "#login-button";
     private String changeCompany = "//*[@id=\"root\"]/div/div/header/div/div/div[2]/button";
     private String aliceCapital = "li[tabindex=\"0\"]";
-    private String firstIncoming = "//div[1]/div/div[2]/ul/div[1]";
+   // private String firstIncoming = "//div/div/div[2]/div/div[1]/div/div[2]/ul/div[1]/span[1]/div";
     private String chatMessage = "//div[2]/div[1]/p/span"; // выбрать первое сообщение в Chat
     private String valetMessage = "//div/div[2]/div[1]/p"; // выбрать первое сообщение Valet
     private String reservationFormMessage = "//div[2]/div[1]/p";
-    private String declineRequestButton = "//div[3]/button[2]/span[1]";
 
-    @FindBy(css = "path[d=\"M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z\"]")
+    @FindBy(css = "#chat-box-header-menu")
     public WebElement MoreOptionButton;
 
-    @FindBy (xpath = "//*[@id=\"menu-send-actions\"]/div[2]/ul/li[2]/div")
+    @FindBy (css = "#chat-header-menu-item-2")
     public WebElement ChangeServiceTypeButton;
 
     @FindBy (xpath = "//div[2]/div[2]/div/div[2]/div/div/div")
-    public WebElement OpenServiceList;
+    public WebElement OpenServiceList;  // no Id attribute
 
-    @FindBy (xpath = "//div[2]/div/div[2]/div[3]/button[1]")
+    @FindBy (css = "#assign-service-dialog-cancel-button")
     private WebElement ChangeServiseCancel;
 
     @FindBy (css = "li[data-value=\"2\"]")
@@ -60,17 +59,29 @@ public class AdmiIncommengPage extends AbstractTestPage {
     @FindBy (css = "li[data-value=\"11\"]")
     public WebElement changeToPool;
 
-    @FindBy (xpath = "//body/div[2]/div/div[2]/div[3]/button[2]/span[1]")
+    @FindBy (css = "#assign-service-dialog-assign-button")
     public WebElement assignRequestButton;
 
-    @FindBy (css = "ul > div:nth-child(1) > span> div > h3")
+    @FindBy (css = "#incoming-primary-text-0")
     public WebElement FirstMessageTypeIncoming;
 
     @FindBy (xpath = "//*[@id=\"menu-\"]/div[2]/ul")
-    public WebElement AssignList;
+    public WebElement AssignList; // not used
 
-    @FindBy (xpath = "//div/div[2]/div/div[3]/button[1]")
+    @FindBy (css = "#accept-request-button")
     public WebElement acceptRequestButton;
+
+    @FindBy (xpath="//div/div[2]/div/div[2]/div/div/div/div/div[2]/div[2]")
+    public WebElement firstMessageTime;  // no Id attribute
+    @FindBy (css="#decline-request-button")
+    public WebElement declineRequestButton;
+
+    @FindBy (css="#incoming-chat-item-0")
+    public WebElement firstChatIncoming;
+
+    @FindBy (css = "#login-button")
+    public WebElement LoginButton;
+
 
 
 
@@ -80,7 +91,7 @@ public class AdmiIncommengPage extends AbstractTestPage {
         wLogin.sendKeys(login);
         WebElement wPass = driver.findElement(By.cssSelector(passAdmin));
         wPass.sendKeys(password);
-        driver.findElement(By.xpath(signIn)).click();
+        LoginButton.click();
     }
 
     public void selectCompany(){
@@ -89,8 +100,9 @@ public class AdmiIncommengPage extends AbstractTestPage {
     }
 
     public void selectFirstRequest (){
-        new WebDriverWait(driver, 20).until(ExpectedConditions.elementToBeClickable(By.xpath(firstIncoming)));
-        driver.findElement(By.xpath(firstIncoming)).click();
+        safeAlertDissmiss();
+       new WebDriverWait(driver, 20).until(ExpectedConditions.elementToBeClickable(firstChatIncoming));
+        firstChatIncoming.click();
     }
 
     public String getFirstMessage(){
@@ -109,8 +121,13 @@ public class AdmiIncommengPage extends AbstractTestPage {
     }
 
     public void declineRequest(){
-        driver.findElement(By.xpath(declineRequestButton)).click();
-        new WebDriverWait(driver, 20).until(ExpectedConditions.invisibilityOfElementLocated(By.xpath(declineRequestButton)));
+        declineRequestButton.click();
+        new WebDriverWait(driver, 20).until(ExpectedConditions.invisibilityOfAllElements(declineRequestButton));
+    }
+
+    public String GetTimeOfFirstMessage () {
+        new WebDriverWait(driver, 20).until(ExpectedConditions.presenceOfElementLocated(By.xpath(chatMessage)));
+        return firstMessageTime.getText();
     }
 
     public void changeRequestType (String RequestName) {
@@ -152,7 +169,8 @@ public class AdmiIncommengPage extends AbstractTestPage {
 
     public String GetTypeFirstMessage () {
         Sleep();
-       // new WebDriverWait(driver, 20).until(ExpectedConditions.invisibilityOf((WebElement) By.xpath("//*[@id=\"form-assign-concierge\"]")));
+        Sleep();
+        //new WebDriverWait(driver, 20).until(ExpectedConditions.);
         return FirstMessageTypeIncoming.getText();
     }
 

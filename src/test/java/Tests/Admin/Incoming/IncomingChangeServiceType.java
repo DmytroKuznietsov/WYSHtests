@@ -14,20 +14,33 @@ import java.util.Collection;
 
 
     @RunWith(Parameterized.class)
-    public  class IncomingChangeServiceType extends adminTest {
+    public class IncomingChangeServiceType extends adminTest {
 
         String nameRequest = "Kuznietsov Dmytro";
         String detailsRequest = "Details test test test";
         String participaints = "3";
+        String expectMailTenant = "trentreznor@net3mail.com";
+        String expectPhoneTenant = "+30934854431";
+        String expectUnitTenant = "432";
+        String expectNameTenant = "Trent Reznor";
+        String expectRequestMessage = "A notification about your request has been sent to concierges";
+        String catdNumber = "378282246310005";
+        String cardName = "Trent Reznor";
+        String catdValidDate = "1220";
+        String cvcCard = "186";
+        String tipsMoney = "15"; //$$$
+        String sendTipForm = "Send tip form";
 
-        public void PreconditionTypes (String type) {
-            precondition();
-            switch (type) {
+        @Override
+        protected void precondition () {
+            super.precondition();
+
+            switch (requests) {
                 case "Chat":
                     pages.getTestPageClnt().chatRequest("СhatTo" + requests + " Type convert");
                     break;
                 case "Valet":
-                    pages.getTestPageClnt().valetRequest("ValetTo" + requests + " convert");
+                    pages.getTestPageClnt().valetRequest("ValetTo" +requests + " Type convert");
                     break;
                 case "Entrant authorization":
                     LocalDate randomDate = newDate();
@@ -50,7 +63,7 @@ import java.util.Collection;
                     pages.getTestPageClnt().spaRequest(spaDate , participaints);
                     break;}
                 pages.getTestPageAdm().selectFirstRequest();
-                pages.getTestPageAdm().changeRequestType(requests);
+            //    pages.getTestPageAdm().changeRequestType(requests);
             }
 
 
@@ -60,13 +73,13 @@ import java.util.Collection;
                     {"Chat"}, {"Maintenance"}, { "Party Rooms"}, {"Entrant authorization" }, { "Tennis Court"}, { "Package Delivery"}, {"Spa" }
             });
         }
-        private String requests;
+        protected String requests;
         public IncomingChangeServiceType(String services) {
             this.requests = services;
         }
         @Test
         public void ValetToChangeType() {
-            precondition();
+            super.precondition();
             pages.getTestPageClnt().valetRequest("ValetTo"+requests+" convert");
             pages.getTestPageAdm().selectFirstRequest();
             pages.getTestPageAdm().changeRequestType(requests);
@@ -76,7 +89,7 @@ import java.util.Collection;
 
         @Test
         public void ChatChangeTypeRequest() {
-            precondition();
+            super.precondition();
             pages.getTestPageClnt().chatRequest("СhatTo"+requests+" Type convert");
             pages.getTestPageAdm().selectFirstRequest();
             pages.getTestPageAdm().changeRequestType(requests);
@@ -87,7 +100,7 @@ import java.util.Collection;
 
         @Test
         public void EntrantChangeTypeRequest() {
-            precondition();
+            super.precondition();
             LocalDate randomDate = newDate();
             pages.getTestPageClnt().entrantRequest(nameRequest, randomDate, detailsRequest);
             pages.getTestPageAdm().selectFirstRequest();
@@ -98,7 +111,7 @@ import java.util.Collection;
 
         @Test
         public void ServicesChangeTypeRequest() {
-            precondition();
+            super.precondition();
             LocalDate partyRoom = newDate();
             pages.getTestPageClnt().partyRoomRequest(partyRoom, participaints);
             pages.getTestPageAdm().selectFirstRequest();
@@ -107,7 +120,18 @@ import java.util.Collection;
             Assert.assertEquals(requests, actualResult);
         }
 
+        @Test
+        public void SendTipForm () {
+            precondition();
+            pages.getTestPageAdm().AcceptRequest();
+            pages.getTestPageAdmConv().SendForm(sendTipForm);
+            pages.getTestPageClnt().setTips(tipsMoney);
+            pages.getTestPageClnt().PayMethod(catdNumber,cardName,catdValidDate, cvcCard);
+            String actualRequest = pages.getTestPageAdmConv().FindTextRequest();
 
+            Assert.assertEquals(actualRequest,"The tip was paid succesfully");
+
+        }
 
 
 
