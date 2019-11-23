@@ -1,5 +1,8 @@
 package Pages;
 
+import Tools.DriverType;
+import Tools.PageContainer;
+import Tools.WebDriverFactory;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -14,7 +17,7 @@ public abstract class AbstractTestPage {
     protected WebDriver driver;
 
     public AbstractTestPage() {
-        driver = new ChromeDriver();
+        driver = WebDriverFactory.getDriver(DriverType.CHROME);
         driver.manage().timeouts().pageLoadTimeout(50, TimeUnit.SECONDS);
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         driver.manage().window().maximize();
