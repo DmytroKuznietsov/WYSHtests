@@ -29,9 +29,9 @@ public class ConversationFunctions extends adminTest {
     }
 
     @Test
-//    @DisplayName("Human-readable test name")
-//    @Epic("123123")
-//    @AdviceName("4324")
+    @DisplayName("Human-readable test name")
+    @Epic("123123")
+    @AdviceName("4324")
     public void CreateNewChatVsTenant () {
         super.precondition();
         pages.getTestPageAdmConv().CreateChat(tenantName,chat);

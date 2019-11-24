@@ -22,7 +22,7 @@ public class adminTest extends BaseTest {
             pages.getTestPageAdm().openPage("https://wysh.console-staging.wysh.ai");
             pages.getTestPageAdm().adminLogin("concierge@wysh.ai", "Password2017");
             pages.getTestPageClnt().openPage("https://wysh.console-staging.wysh.ai/widget/login");
-            pages.getTestPageClnt().loginClnt("trentreznor@net3mail.com", "Password2017");
+            pages.getTestPageClnt().loginClnt("jahex53879@exserver.top", "Password2017");
             pages.getTestPageClnt().requestMenu();
             pages.getTestPageAdm().selectCompany();
     }
